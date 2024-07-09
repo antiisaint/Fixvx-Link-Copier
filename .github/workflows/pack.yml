@@ -16,14 +16,14 @@ jobs:
         uses: montudor/action-zip@v1
         
       - name: Zip Chrome extension
-        run: zip -r ../Fixvx-Link-Copier.zip * .[^.]* -x .github/\*
+        run: zip -r ../Fixvx-Link-Copier.zip * .[^.]* -x .github/\* -x .git/\*
         working-directory: ${{ github.workspace }}
         
       - name: Create Release
         id: create_release
         uses: comnoco/create-release-action@v2.0.5
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
@@ -33,7 +33,7 @@ jobs:
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ github.workspace }}/../Fixvx-Link-Copier.zip
