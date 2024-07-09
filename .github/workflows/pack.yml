@@ -16,12 +16,12 @@ jobs:
         uses: montudor/action-zip@v1
         
       - name: Zip Chrome extension
-        run: zip -r ../Fixvx-Link-Copier.zip .
+        run: zip -r ../Fixvx-Link-Copier.zip * .[^.]* -x .github/\*
         working-directory: ${{ github.workspace }}
         
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: comnoco/create-release-action@v2.0.5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
