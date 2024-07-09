@@ -1,4 +1,4 @@
-name: Chrome Extension
+name: Chrome Extension Release
 on:
   push:
     branches: [ "main" ]
@@ -15,8 +15,8 @@ jobs:
       - name: Install ZIP
         uses: montudor/action-zip@v1
         
-      - name: Unzip Chrome extension
-        run: unzip -qq ../Fixvx-Link-Copier.zip -d Fixvx-Link-Copier
+      - name: Zip Chrome extension
+        run: zip -r ../Fixvx-Link-Copier.zip .
         working-directory: ${{ github.workspace }}
         
       - name: Create Release
@@ -36,6 +36,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/Fixvx-Link-Copier.zip
+          asset_path: ${{ github.workspace }}/../Fixvx-Link-Copier.zip
           asset_name: Fixvx-Link-Copier.zip
           asset_content_type: application/zip
