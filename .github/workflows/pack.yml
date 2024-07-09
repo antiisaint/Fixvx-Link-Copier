@@ -15,10 +15,6 @@ jobs:
       - name: Install ZIP
         uses: montudor/action-zip@v1
         
-      - name: Setup NPM packages
-        run: npm install
-      - name: Pack extension
-        run: npm run build
       - name: Unzip Chrome extension
         run: unzip -qq ../Fixvx-Link-Copier.zip -d Fixvx-Link-Copier
         working-directory: ${{ github.workspace }}
