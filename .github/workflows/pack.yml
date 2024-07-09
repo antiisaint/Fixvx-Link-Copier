@@ -19,14 +19,19 @@ jobs:
         run: zip -r ../Fixvx-Link-Copier.zip * .[^.]* -x .github/\* -x .git/\*
         working-directory: ${{ github.workspace }}
         
+      - name: Generate release tag
+        id: tag
+        run: |
+          echo "::set-output name=release_tag::release_$(date +"%Y.%m.%d_%H-%M")"
+
       - name: Create Release
         id: create_release
-        uses: comnoco/create-release-action@v2.0.5
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          release_name: Release ${{ steps.tag.outputs.release_tag }}
           draft: false
           prerelease: false
           
