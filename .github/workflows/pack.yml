@@ -1,0 +1,45 @@
+name: Chrome Extension
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Tree
+        uses: actions/checkout@v4
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+      - name: Install ZIP
+        uses: montudor/action-zip@v1
+        
+      - name: Setup NPM packages
+        run: npm install
+      - name: Pack extension
+        run: npm run build
+      - name: Unzip Chrome extension
+        run: unzip -qq ../Fixvx-Link-Copier.zip -d Fixvx-Link-Copier
+        working-directory: ${{ github.workspace }}
+        
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+          
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ github.workspace }}/Fixvx-Link-Copier.zip
+          asset_name: Fixvx-Link-Copier.zip
+          asset_content_type: application/zip
